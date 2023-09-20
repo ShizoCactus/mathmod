@@ -1,13 +1,17 @@
+import math
+
 import numpy as np
 import matplotlib.pyplot as plt
 import custom_math
 
 
-def generate_data(a, b, c, n=30, noise_variance=1e-6): #Генерация случайных стартовых данных
+def generate_data(a, b, c, n=20, noise_variance=1e-6): #Генерация случайных стартовых данных
     np.random.seed(666)
     x1 = np.random.uniform(-3.0, 3.0, n)
+    x1.sort()
     x2 = np.random.uniform(-3.0, 3.0, n)
-    y = np.multiply((x2 - c) ** 2, np.sin(a * x1 + b * x2)) + np.random.randn() * noise_variance**0.5
+    x2.sort()
+    y = (x2 - c) ** 2 * np.sin(a * x1 + b * x2) + np.random.randn() * noise_variance**0.5
     return x1, x2, y
 
 
@@ -59,3 +63,12 @@ plt.show()
 # которой можно посмотреть смоделированную функцию была выбрана сумма двух переменных, от которых эта
 # функция зависит.
 # Для реализации алгоритма были написаны собственные функции для разложения Холецкого, решения СЛАУ и др.
+for i in range(850, 900):
+    x1_g = x1_graph[i]
+    x2_g = x2_graph[i]
+    y_g = y_graph[i]
+    m = mu[i]
+    s = sd[i]
+    b = m - s <= y_g <= m + s
+    print(i)
+    print('x1=', x1_g, 'x2=', x2_g, 'f=', y_g, 'm=', m, 's=', s, b)
