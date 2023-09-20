@@ -66,12 +66,22 @@ plt.show()
 # Для реализации алгоритма были написаны собственные функции для разложения Холецкого, решения СЛАУ и др.
 
 
-for i in range(800, 900):
-    x1_g = x1_graph[i]
-    x2_g = x2_graph[i]
-    y_g = y_graph[i]
-    m = mu[i]
-    s = sd[i]
-    b = m - s <= y_g <= m + s
-    print(i)
-    print('x1=', x1_g, 'x2=', x2_g, 'f=', y_g, 'm=', m, 's=', s, b)
+def check_accuracy(left, right):
+    ans = 0
+    for i in range(left, right):
+        x1_g = x1_graph[i]
+        x2_g = x2_graph[i]
+        y_g = y_graph[i]
+        m = mu[i]
+        s = sd[i]
+        b = m - s <= y_g <= m + s
+        if b:
+            ans += 1
+        # print(i)
+        # print('x1=', x1_g, 'x2=', x2_g, 'f=', y_g, 'm=', m, 's=', s, b)
+    print(ans / (right - left))
+
+
+check_accuracy(0, 1000)
+check_accuracy(250, 1000)
+check_accuracy(300, 1000)
