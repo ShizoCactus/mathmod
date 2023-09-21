@@ -3,6 +3,17 @@ import matplotlib.pyplot as plt
 import custom_math
 
 
+def transform_array_to_matrix(arr):
+    n = int(len(arr) ** 0.5)
+    mtrx = np.zeros((n, n))
+
+    for i in range(n):
+        for j in range(n):
+            mtrx[i][j] = arr[i * n + j]
+
+    return mtrx
+
+
 def generate_data(a, b, c, n=20, noise_variance=1e-6): #Генерация случайных стартовых данных
     np.random.seed(666)
     x1 = np.random.uniform(-3.0, 3.0, n)
@@ -43,7 +54,7 @@ X_graph.sort(axis=0)
 mu, sd = predict(X, X_graph, sigma, l2)
 
 
-# Визуализация данных
+# Визуализация данных 2d
 summa = np.array([t[0] + t[1] for t in X])
 summa_graph = np.array([t[0] + t[1] for t in X_graph])
 y_min = np.array(mu - sd)
@@ -55,15 +66,29 @@ plt.xlabel('X')
 plt.ylabel('y')
 plt.legend()
 plt.show()
-# Программа генерирует 30 случайных точек (x1, x2) и считает значение функции в них.
-# Дальше, используя регрессию Гауссовских процессов, программа предполагает
-# значение функции в 1000 случайных точках (вероятное среднее значение и возможное отклонение).
-# На основании этих предположений строится график функции.
-# Так как построить трёхмерный график на котором было бы видно и среднее значение и отклонение в обе стороны
-# не представляется возможным, было принято решение построить двумерный график; в качестве величины, относительно
-# которой можно посмотреть смоделированную функцию была выбрана сумма двух переменных, от которых эта
-# функция зависит.
-# Для реализации алгоритма были написаны собственные функции для разложения Холецкого, решения СЛАУ и др.
+
+
+# Визуализация данных 3d
+
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1, projection='3d')
+ax.plot_surface(transform_array_to_matrix(x1_graph[271:1000]), transform_array_to_matrix(x2_graph[271:1000]), transform_array_to_matrix(y_graph[271:1000]))
+plt.show()
+
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1, projection='3d')
+ax.plot_surface(transform_array_to_matrix(x1_graph[100:1000]), transform_array_to_matrix(x2_graph[100:1000]), transform_array_to_matrix(mu[100:1000]))
+plt.show()
+
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1, projection='3d')
+ax.plot_surface(transform_array_to_matrix(x1_graph[100:1000]), transform_array_to_matrix(x2_graph[100:1000]), transform_array_to_matrix(mu[100:1000] - sd[100:1000]))
+plt.show()
+
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1, projection='3d')
+ax.plot_surface(transform_array_to_matrix(x1_graph[100:1000]), transform_array_to_matrix(x2_graph[100:1000]), transform_array_to_matrix(mu[100:1000] + sd[100:1000]))
+plt.show()
 
 
 def check_accuracy(left, right):
